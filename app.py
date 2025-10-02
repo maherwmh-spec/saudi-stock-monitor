@@ -120,15 +120,15 @@ def analyze_stock(stock_name, stock_symbol, stock_data, tasi_data, sector_data):
     latest = stock_data.iloc[-1]
     
     conditions = {
-        'tasi': tasi_data["Close"].iloc[-1] > tasi_data["Close"].iloc[-5:].mean(),
-        'sector': sector_data["Close"].iloc[-1] > sector_data["Close"].iloc[-5:].mean(),
-        'obv': latest["OBV"] > stock_data["OBV"].iloc[-10:-1].mean(),
-        'volume': latest["Volume"] > (stock_data["Volume"].iloc[-21:-1].mean() * 2),
-        'price_breakout': latest["Close"] > stock_data["High"].iloc[-11:-1].max(),
-        'ma': latest["Close"] > latest["MA50"],
-        'rsi': 50 < latest["RSI"] < 70,
-        'macd': latest["MACD"] > latest["Signal_Line"] and latest["MACD"] > 0,
-        'bollinger': latest["Close"] > latest["Upper_Band"]
+        'tasi': bool(tasi_data["Close"].iloc[-1] > tasi_data["Close"].iloc[-5:].mean()),
+        'sector': bool(sector_data["Close"].iloc[-1] > sector_data["Close"].iloc[-5:].mean()),
+        'obv': bool(latest["OBV"] > stock_data["OBV"].iloc[-10:-1].mean()),
+        'volume': bool(latest["Volume"] > (stock_data["Volume"].iloc[-21:-1].mean() * 2)),
+        'price_breakout': bool(latest["Close"] > stock_data["High"].iloc[-11:-1].max()),
+        'ma': bool(latest["Close"] > latest["MA50"]),
+        'rsi': bool(50 < latest["RSI"] < 70),
+        'macd': bool(latest["MACD"] > latest["Signal_Line"] and latest["MACD"] > 0),
+        'bollinger': bool(latest["Close"] > latest["Upper_Band"])
     }
     
     met_conditions = sum(conditions.values())
